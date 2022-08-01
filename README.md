@@ -17,15 +17,18 @@ It also has an indefinite possibility and opportunities to grow and improve upon
 ### More detailed explanation of Data Preparation and Model Creation
 
 ## Data Preparation
-> 1. Choose the proper dataset (file). Especially try to take dataset collected from the nodes (interface) which were attached near the brain region which controls language. 
-> 2. Extract alpha, beta, gamma and theta waves and plot them as a normal plot
-> 3. Stack them into a single image (stack them like in RGB way). Please refer to data_prep.ipynb for details
-> 4. Save stacked image in .npy format. This is to retain each channel’s information and preventing it to be converted into simple RGB image
-> 5. Store path to image, word and classification (happiness, sadness, etc) in single csv file
+> 1. From the [ZuCo 2.0 dataset](https://osf.io/2urht/) (CC-By Attribution 4.0 International), select random preprocessed datasets. Then, extract the brainwave (alpha, beta, gamma, theta) data and corresponding words.
+> 2. For each word, monochromatically plot (without axes) the alpha, beta, theta and gamma brainwave and stack all of them in channel direction (similar to the way that RGB image is formed).
+> 3. For each word, compute the similarity between each classes of emotions ["sadness", "happiness", "disgust", "neutral", "anger", "fear"]. Obtaining a word embedder (in this case pretrained word2vec), we are able to compute similarity between two words. Thus, we compare word and the name of emotions listed in last sentence.
+> 4. Save stacked image in .npy format. This is to retain each channel’s information and preventing it to be converted into simple RGB or RGBA image
+> 5. Store file name of images, word and classification (happiness, sadness, etc) in single csv file
+  
+Please refer to [this](https://colab.research.google.com/drive/11KG2RCPyd_Uj-Mb2Kp1BplEjscrnwjBi) google colab notebook to view the sample run of the data preparation code.
 
 ## Model Creation
-> 1. Prepare dataset (image and label pair). Normalize the image to prevent model paramters to become gigantic. If labels are not onehot encoded, do so (I can provide script for this). Make sure to check that your images are in the expected shape.
-> 2. Create model. There are multiple ways to build models in tensorflow (and that’s why I am not a big fan of tensorflow), but we will stick to the method which uses Sequential class. Refer to tutorial for this.
-> 3. Compile model and fit. There are bunch of options to compile, like optimizer or loss. Nowadays people usually use Adam with a learning rate of 1e-4 ~ 1e-5 for optimizer since it is known to wrok well. For loss function, choose CrossEntropy or its variant. This is due to the format of data in multiclass supervised learning. 
-> 4. After the successful run, you might want to save it immediately. Some process takes 10 hours or beyond, so make sure to save. 
-> 5. After saving the model, you can test your trained model on some test dataset and check the accuracy or other evaluation metrics to evaluate the performance.
+> 1. Prepare dataset (image and label pair). If labels are not onehot encoded, do so (I can provide script for this). Make sure to check that your images are in the expected shape.
+> 2. Create simple multiclass classification CNN model. Stack few CNN layers and predict soft label. 
+> 3. Compile model and fit. 
+> 4. Save model after training. 
+  
+Please refer to [this](https://colab.research.google.com/drive/1SO6GayShC47S1m67pjFdXUDzejM6vJVC#scrollTo=rJA7JDhdaDEt) google colab notebook to view the sample model training run.
