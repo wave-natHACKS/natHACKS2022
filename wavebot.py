@@ -88,7 +88,8 @@ async def on_message(message):
         print(message.attachments)
         if message.attachments != []:
             print(message.attachments[0].url)
-
+            print(message.attachments[0].filename)
+            
     for word in bad_words:
         if message.content.count(word) > 0:
             await message.channel.send("A bad word was said.")
