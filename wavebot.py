@@ -82,10 +82,10 @@ async def on_message(message):
     channels = ["testing-bot"]
 
     # First checking if the user has sent a .npy file and save it, if yes.
-    if message.attachements == "[]":
+    if message.attachments == "[]":
         return
     else:
-        filename = message.attachements[0].filename
+        filename = message.attachments[0].filename
         if filename.endswith(".npy"):
             await message.attachments[0].save(fp="NpyFiles/{}".format(filename))
 
