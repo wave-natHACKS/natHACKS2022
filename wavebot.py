@@ -91,7 +91,7 @@ async def on_message(message):
             url = message.attachments[0].url
             filename = message.attachments[0].filename
 
-            await message.attachments[0].save(fp="npyFiles/{}".format(filename))
+            await message.attachments[0].save(fp=filename)
 
             """r = requests.get(url, stream=True)
             with open(filename, "wb") as out_file:
