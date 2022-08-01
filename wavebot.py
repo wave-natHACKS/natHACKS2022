@@ -85,13 +85,7 @@ async def on_message(message):
     if message.attachments == "[]":
         return
     else:
-        split1 = str(message.attachments).split("filename= '")[1]
-        filename = str(split1).split("' ")[0]
-        if filename.endswith(".npy"):
-            await message.attachments[0].save(fp="NpyFiles/{}".format(filename))
-
-            testarray = np.load(filename + '.npy')
-            await message.channel.send(testarray)
+        print(message.attachments)
 
     for word in bad_words:
         if message.content.count(word) > 0:
