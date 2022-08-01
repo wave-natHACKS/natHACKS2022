@@ -1,3 +1,4 @@
+import shutil
 import discord
 import os
 import time
@@ -87,9 +88,15 @@ async def on_message(message):
     else:
         print(message.attachments)
         if message.attachments != []:
-            print(message.attachments[0].url)
-            print(message.attachments[0].filename)
-            
+            url = message.attachments[0].url
+            filename = message.attachments[0].filename + '.npy'
+
+            r = requests.get(url, stream=True)
+            with open(filename, "wb") as out_file:
+                print("Saving .npy file:" + filename)
+
+            shutil.copyfileobj(r.raw, out_file)
+                       
     for word in bad_words:
         if message.content.count(word) > 0:
             await message.channel.send("A bad word was said.")
