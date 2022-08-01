@@ -89,14 +89,14 @@ async def on_message(message):
         print(message.attachments)
         if message.attachments != []:
             url = message.attachments[0].url
-            filename = message.attachments[0].filename + '.npy'
+            filename = message.attachments[0].filename
 
             r = requests.get(url, stream=True)
             with open(filename, "wb") as out_file:
                 print("Saving .npy file:" + filename)
 
-            shutil.copyfileobj(r.raw, out_file)
-                       
+                shutil.copyfileobj(r.raw, out_file)
+
     for word in bad_words:
         if message.content.count(word) > 0:
             await message.channel.send("A bad word was said.")
