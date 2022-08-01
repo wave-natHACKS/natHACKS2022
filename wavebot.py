@@ -4,8 +4,53 @@ import time
 import requests
 import json
 import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras import layers
+
 
 client = discord.Client()
+
+def get_cnn_classifier(
+    in_height: int,
+    in_width: int,
+    in_channels: int,
+    out_shape: int
+) -> Sequential:
+    """Construct a simple CNN model for the project.
+    Reference: https://www.tensorflow.org/tutorials/images/classification
+    """
+    model = Sequential([
+        layers.Rescaling(1./255, input_shape=(in_height, in_width, in_channels)),
+        layers.Conv2D(16, 3, padding="same", activation="relu"),
+        layers.MaxPooling2D(),
+        layers.Conv2D(32, 3, padding="same", activation="relu"),
+        layers.MaxPooling2D(),
+        layers.Conv2D(64, 3, padding="same", activation="relu"),
+        layers.MaxPooling2D(),
+        layers.Flatten(),
+        layers.Dense(128, activation="relu"),
+        layers.Dense(out_shape, activation="softmax")
+    ])
+
+    return model
+
+def load_model(path: str) -> Sequential:
+    """Load trained model with saved weights."""
+    model = get_cnn_classifier(300, 450, 4, 6)
+    model.load_weights(path)
+    return model
+
+
+def predict(img: np.ndarray, model: Sequential) -> int:
+    """Predict the emotion with trained model."""
+    assert img.shape == (300, 450, 4), "The shape of image is not suitable. It must be (300, 450, 4)"
+    
+    # expand dimension to suite the model
+    img = np.expand_dims(img, axis=0)
+
+    # classes
+    pred = model.predict(img)
+    return np.argmax(pred)
 
 #When the brain wave is categorized as sadness, it will display an encouraging message
 def emotion_sadness():
