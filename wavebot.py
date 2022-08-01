@@ -75,8 +75,12 @@ async def on_message(message):
             file = np.load(filename)
             print(file.shape)
 
+            await message.channel.send("File has been successfully saved!")
+            time.sleep(1)
+            await message.channel.send("Running data pre-processing and modelling...")
+
     """
-    Data pre-processing and modeling
+    Data pre-processing and modelling
 
     """  
     
@@ -98,11 +102,11 @@ async def on_message(message):
     # !about command
     if message.content == "!about":
         await message.channel.send("We as humans, we have multiple ways to express our emotions.")  
-        time.sleep(1)
+        time.sleep(2)
         await message.channel.send("Facial expression, body language, and so on.")
-        time.sleep(1)
+        time.sleep(2)
         await message.channel.send("While these effectively express our emotional feelings, none of them will outperform the brainwave to express one’s emotions.")
-        time.sleep(1)
+        time.sleep(2)
         await message.channel.send("I reveal the human’s emotional feeling based on the pulse of brainwave, using the machine learning model.")
 
 
@@ -123,13 +127,13 @@ async def on_message(message):
             await message.channel.send("Hello there " + message.author.mention + "!")
             time.sleep(0.5)
             await message.channel.send("I am Wave and you can predict anyone's emotions based on their brain waves!")
-            time.sleep(1.5)
+            time.sleep(2.5)
             await message.channel.send("To start,")
             time.sleep(0.5)
             await message.channel.send("Send a .npy file containing data on brain waves.")
-            time.sleep(0.5)
+            time.sleep(1.5)
             await message.channel.send("Go make yourself coffee or cup of tea..")
-            time.sleep(0.25)
+            time.sleep(1.25)
             await message.channel.send("In a minute or so, the brain waves will be translated to an emotion!")
             await message.channel.send("\U0001F60E")
 
