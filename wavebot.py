@@ -6,15 +6,6 @@ import requests
 import json
 import numpy as np
 
-# Keep track of total .npy files scanned and cumulative number of emotions (these are global variables)
-scannedNpy = 0
-happy = 0 
-sad = 0 
-angry = 0 
-disgust = 0 
-fear = 0 
-neutral = 0
-
 client = discord.Client()
 
 
@@ -33,23 +24,6 @@ def emotion_happiness():
     link = json_data["url"]
     return link
 
-
-async def update_stats():
-    await client.wait_until_ready()
-    global scannedNpy, happy, sad, angry, disgust, fear, neutral
-
-    while not client.is_closed():
-        try:
-            with open("stats.txt", "a") as f:
-                f.write(f"Time: {time.asctime(time.localtime(time.time()))}\nTotal Brains Scanned: {scannedNpy}\nTotal Happy Emotions Scanned: {happy}\nTotal Sad Emotions Scanned: {sad}\nTotal Angry Emotions Scanned: {angry}\nTotal Disgust Emotions Scanned: {disgust}\nTotal Fear Emotions Scanned: {fear}\nTotal Neutral Emotions Scanned: {neutral}\n")
-
-            await asyncio.sleep(5)
-        
-        except Exception as e:
-            print(e)
-            await asyncio.sleep(5)
-
-
 #Displays that the bot is on
 @client.event
 async def on_ready():
@@ -58,13 +32,9 @@ async def on_ready():
 #Restricted to the specific channel where only specific users can communicate with the bot
 @client.event
 async def on_message(message):
-    global scannedNpy, happy, sad, angry, disgust, fear, neutral
 
     id = client.get_guild(991909090517340170)
     channels = ["testing-bot"]
-
-    # Update the counter for total brains scanned
-    scannedNpy += 1
 
     # First checking if the user has sent a .npy file and save it, if yes.
     if message.attachments == "[]":
@@ -81,8 +51,11 @@ async def on_message(message):
             file = np.load(filename)
             print(file.shape)
 
-            await message.channel.send("File has been successfully saved!")
+            time.sleep(0.5)
+            await message.channel.send("Saving File: " + filename)
             time.sleep(1)
+            await message.channel.send("File has been successfully saved!")
+            time.sleep(1.5)
             await message.channel.send("Running data pre-processing and modelling...")
 
     """
@@ -145,8 +118,6 @@ async def on_message(message):
 
 
         if message.content.find("!sad") != -1:
-
-            sad += 1 #increment counter
             
             embedded_sad1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_sad1)
@@ -163,8 +134,6 @@ async def on_message(message):
             await message.channel.send(quote + "\n")            
         
         if message.content.find("!happy") != -1:
-            
-            happy += 1 #increment counter
 
             embedded_happy1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_happy1)
@@ -181,8 +150,6 @@ async def on_message(message):
             await message.channel.send(link)
         
         if message.content.find("!fear") != -1:
-
-            fear += 1 #increment counter
 
             embedded_fear1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_fear1)
@@ -214,8 +181,6 @@ async def on_message(message):
 
         if message.content.find("!anger") != -1:
 
-            anger += 1 #increment counter
-
             embedded_anger1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_anger1)
             time.sleep(2)
@@ -234,8 +199,6 @@ async def on_message(message):
             await message.channel.send('by wounding another.')
             
         if message.content.find("!disgust") != -1:
-
-            disgust += 1 #increment counter
 
             embedded_disgust1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_disgust1)
@@ -256,8 +219,6 @@ async def on_message(message):
 
         if message.content.find("!neutral") != -1:
 
-            neutral += 1 #increment counter
-
             embedded_neutral1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_neutral1)
             time.sleep(2)
@@ -277,9 +238,6 @@ async def on_message(message):
             time.sleep(1)
             await message.channel.send("Hahaha!!! ")
             
-
-#Run update_usersandmessages constantly
-client.loop.create_task(update_stats())
 
 #Run the bot
 client.run(os.environ["DISCORD_TOKEN"])
