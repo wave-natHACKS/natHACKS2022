@@ -94,6 +94,9 @@ async def on_message(message):
             await message.attachments[0].save(filename)
             print("Saving .npy file succeeded")
 
+            file = np.load(filename)
+            print(file)
+
             """r = requests.get(url, stream=True)
             with open(filename, "wb") as out_file:
                 print("Saving .npy file: " + filename)
