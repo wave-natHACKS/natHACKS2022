@@ -16,9 +16,12 @@ It also has an indefinite possibility and opportunities to grow and improve upon
 
 ### More detailed explanation of Data Preparation and Model Creation
 
+
 ## Data Preparation
 > 1. We Chose Zuco 2..0 dataset.
 > 2. Extracted alpha, beta, gamma and theta waves and plot them as a normal plot for each type of wave
+> 2.1 zuco 2.0 dataset provided a matlab files with all the brain wave data. For each english word, it had corresponding alpha, beta, gamma, and theta information
+ we extracted that and put them in a dictionary to use this map for furthur processing
 > 3. Stack each plot into a single image (stack them like in RGB channel). 
 > 4. Save stacked image in .npy format. This is to retain each channel’s information and preventing it to be converted into simple RGB image
 > 5. use word2vec word embedder to help classify which the word. We used the cosine similarity algorithm of word2vec to greedily chose the most similar label for this word
