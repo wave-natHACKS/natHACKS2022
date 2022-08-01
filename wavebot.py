@@ -51,12 +51,18 @@ async def on_message(message):
             file = np.load(filename)
             print(file.shape)
 
+            embedded = discord.Embed(title="Saving .npy File", description=filename)
+            await message.channel.send(content=None,embed=embedded)
+
             time.sleep(0.5)
-            await message.channel.send("Saving File: " + filename + "...")
+     
             time.sleep(1)
-            await message.channel.send("File has been successfully saved!")
+            embedded = discord.Embed(title="Status Update:", description=filename + "saved successfully.")
+            await message.channel.send(content=None,embed=embedded)
+            
             time.sleep(1.5)
-            await message.channel.send("Running data pre-processing and modelling...")
+            embedded = discord.Embed(title="Beginning Data Pre-processing and Modelling", description= "")
+            await message.channel.send(content=None,embed=embedded)
 
     """
     Data pre-processing and modelling
