@@ -1,5 +1,3 @@
-import shutil
-from tkinter import N
 import discord
 import os
 import time
@@ -248,7 +246,7 @@ async def on_message(message):
         if message.content.find("!neutral") != -1:
 
             neutral += 1 #increment counter
-            
+
             embedded_neutral1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_neutral1)
             time.sleep(2)
