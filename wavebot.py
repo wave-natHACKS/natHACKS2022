@@ -7,7 +7,7 @@ import json
 import numpy as np
 
 # Keep track of total .npy files scanned and cumulative number of emotions (these are global variables)
-scannedNpy = happy = sad = angry = disgust = fear = neutral = 0
+scannedNpy, happy, sad, angry, disgust, fear, neutral = 0
 
 client = discord.Client()
 
