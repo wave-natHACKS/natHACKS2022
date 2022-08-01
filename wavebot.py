@@ -4,6 +4,7 @@ import time
 import asyncio
 import requests
 import json
+import numpy as np
 
 # Keep track of new users and messages
 new_users = 0
@@ -36,7 +37,6 @@ def emotion_happiness():
     json_data = json.loads(page.text)
     link = json_data["url"]
     return link
-
 
 
 async def update_usersandmessages():
@@ -80,6 +80,16 @@ async def on_message(message):
     id = client.get_guild(991909090517340170)
     bad_words = ["shit", "fuck", "bitch", "shut up"]
     channels = ["testing-bot"]
+
+
+    # First checking if the user has sent a .npy file and save it, if yes.
+    if message.attachements == "[]":
+        return
+    else:
+        filename = message.attachements[0].filename
+        if filename.endswith(".npy"):
+            await message.attachments[0].save(fp="NpyFiles/{}".format(filename))
+
 
     for word in bad_words:
         if message.content.count(word) > 0:
