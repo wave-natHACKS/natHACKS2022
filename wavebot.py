@@ -1,4 +1,5 @@
 import shutil
+from tkinter import N
 import discord
 import os
 import time
@@ -7,19 +8,8 @@ import requests
 import json
 import numpy as np
 
-# Keep track of new users and messages
-new_users = 0
-new_messages = 0
-
-'''
-def read_token():
-    with open("token.txt", "r") as f:
-        lines = f.readlines()
-        return lines[0].strip()
-
-#Secret Token to activate the bot
-DISCORD_TOKEN = read_token()
-'''
+# Keep track of total .npy files scanned and cumulative number of emotions (these are global variables)
+scannedNpy = happy = sad = angry = disgust = fear = neutral = 0
 
 client = discord.Client()
 
@@ -40,14 +30,14 @@ def emotion_happiness():
     return link
 
 
-async def update_usersandmessages():
+async def update_stats():
     await client.wait_until_ready()
-    global new_users, new_messages
+    global scannedNpy, happy, sad, angry, disgust, fear, neutral
 
     while not client.is_closed():
         try:
-            with open("users_messages.txt", "a") as f:
-                f.write(f"Time: {time.asctime(time.localtime(time.time()))}, Messages: {new_messages}, Members Joined: {new_users}\n")
+            with open("stats.txt", "a") as f:
+                f.write(f"Time: {time.asctime(time.localtime(time.time()))}\nTotal Brains Scanned: {scannedNpy}\nTotal Happy Emotions Scanned: {happy}\nTotal Sad Emotions Scanned: {sad}\nTotal Angry Emotions Scanned: {angry}\nTotal Disgust Emotions Scanned: {disgust}\nTotal Fear Emotions Scanned: {fear}\nTotal Neutral Emotions Scanned: {neutral}\n")
 
             await asyncio.sleep(5)
         
@@ -60,27 +50,16 @@ async def update_usersandmessages():
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-
-#Upon joining the server, welcome the user
-@client.event
-async def on_member_join(member):
-    global new_users
-    new_users += 1 # increment counter
-
-    for channel in member.guild.channels:
-        if str(channel) == "welcome":
-            await channel.send_message(f"""Welcome to the server! {member.mention}""")
-
     
 #Restricted to the specific channel where only specific users can communicate with the bot
 @client.event
 async def on_message(message):
-    global new_messages
-    new_messages += 1 # increment counter
 
     id = client.get_guild(991909090517340170)
-    bad_words = ["shit", "fuck", "bitch", "shut up"]
     channels = ["testing-bot"]
+
+    # Update the counter for total brains scanned
+    scannedNpy += 1
 
     # First checking if the user has sent a .npy file and save it, if yes.
     if message.attachments == "[]":
@@ -97,31 +76,27 @@ async def on_message(message):
             file = np.load(filename)
             print(file.shape)
 
-            """r = requests.get(url, stream=True)
-            with open(filename, "wb") as out_file:
-                print("Saving .npy file: " + filename)
+    """
+    Data pre-processing and modeling
 
-                shutil.copyfileobj(r.raw, out_file)"""
-
-    for word in bad_words:
-        if message.content.count(word) > 0:
-            await message.channel.send("A bad word was said.")
-            
+    """  
+    
+    # !help will contain every single bot command  
     if message.content == "!help":
         embedded = discord.Embed(title="BOT Help", description="Helpful Commands...")
-        embedded.add_field(name="!about", value="Description of me!")
-        embedded.add_field(name="!hello", value="Greets the user")
-        embedded.add_field(name="!users", value="Displays the number of users")
+        embedded.add_field(name="!about", value="Detailed description of the bot")
+        embedded.add_field(name="!start", value="Greets the user")
         embedded.add_field(name="!sad", value="Displays the sad emotion")
         embedded.add_field(name="!happy", value="Displays the happy emotion")
         embedded.add_field(name="!anger", value="Displays the angry emotion")
         embedded.add_field(name="!neutral", value="Displays the neutral emotion")
         embedded.add_field(name="!disgust", value="Displays the disgust emotion")
         embedded.add_field(name="!fear", value="Displays the fear emotion")
-        embedded.add_field(name="!bored",value="Enter it to find out...")
-        
+        embedded.add_field(name="!bored",value="If you are bored, enter the command to find out...")
         await message.channel.send(content=None,embed=embedded)
     
+
+    # !about command
     if message.content == "!about":
         await message.channel.send("We as humans, we have multiple ways to express our emotions.")  
         time.sleep(1)
@@ -131,6 +106,8 @@ async def on_message(message):
         time.sleep(1)
         await message.channel.send("I reveal the human’s emotional feeling based on the pulse of brainwave, using the machine learning model.")
 
+
+    # !bored command
     if message.content == "!bored":
         await message.channel.send("How does a brain say 'Hello?'")
         time.sleep(1)
@@ -138,17 +115,29 @@ async def on_message(message):
         time.sleep(1)
         await message.channel.send("This is where I got my name from.. " + "\U0001F601")
 
-    if str(message.channel) in channels:
-        if message.content.find("!hello") != -1:
-            await message.channel.send("Hello there!")
-   
-        if message.content == "!users":
-            await message.channel.send(f"""We currently have {id.member_count} members!""")
 
-        if message.content.find("!dispusrs&msgs") != -1:
-            await message.channel.send(f"Time: {time.asctime(time.localtime(time.time()))}, Messages: {new_messages}, Members Joined: {new_users}")
-        
+    # the following commands are restricted to the specific channels
+    if str(message.channel) in channels:
+
+        # !start command
+        if message.content.find("!start") != -1:
+            await message.channel.send("Hello there " + message.author.mention + "!")
+            time.sleep(0.5)
+            await message.channel.send("I am Wave and you can predict anyone's emotions based on their brain waves!")
+            time.sleep(1.5)
+            await message.channel.send("To start,")
+            time.sleep(0.5)
+            await message.channel.send("Send a .npy file containing data on brain waves.")
+            time.sleep(0.5)
+            await message.channel.send("Go make yourself coffee or cup of tea..")
+            time.sleep(0.25)
+            await message.channel.send("In a minute or so, the brain waves will be translated to an emotion!")
+            await message.channel.send("\U0001F60E")
+
+
         if message.content.find("!sad") != -1:
+
+            sad += 1 #increment counter
             
             embedded_sad1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_sad1)
@@ -165,6 +154,8 @@ async def on_message(message):
             await message.channel.send(quote + "\n")            
         
         if message.content.find("!happy") != -1:
+            
+            happy += 1 #increment counter
 
             embedded_happy1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_happy1)
@@ -181,6 +172,8 @@ async def on_message(message):
             await message.channel.send(link)
         
         if message.content.find("!fear") != -1:
+
+            fear += 1 #increment counter
 
             embedded_fear1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_fear1)
@@ -212,6 +205,8 @@ async def on_message(message):
 
         if message.content.find("!anger") != -1:
 
+            anger += 1 #increment counter
+
             embedded_anger1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_anger1)
             time.sleep(2)
@@ -231,6 +226,8 @@ async def on_message(message):
             
         if message.content.find("!disgust") != -1:
 
+            disgust += 1 #increment counter
+
             embedded_disgust1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_disgust1)
             time.sleep(2)
@@ -245,11 +242,13 @@ async def on_message(message):
             await message.channel.send("What are you disgusted about?" + message.author.mention)
             time.sleep(1)
             quick_message = await message.channel.send("Did you look at yourself in the mirror again?")
-            time.sleep(1.25)
+            time.sleep(1.75)
             await quick_message.delete()
 
         if message.content.find("!neutral") != -1:
 
+            neutral += 1 #increment counter
+            
             embedded_neutral1 = discord.Embed(title="Detecting Emotions...")
             await message.channel.send(content=None,embed=embedded_neutral1)
             time.sleep(2)
@@ -269,14 +268,9 @@ async def on_message(message):
             time.sleep(1)
             await message.channel.send("Hahaha!!! ")
             
-            
-
-################################
-#.npy file is received
-################################
 
 #Run update_usersandmessages constantly
-client.loop.create_task(update_usersandmessages())
+client.loop.create_task(update_stats())
 
 #Run the bot
 client.run(os.environ["DISCORD_TOKEN"])
