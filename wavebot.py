@@ -86,6 +86,8 @@ async def on_message(message):
         return
     else:
         print(message.attachments)
+        if message.attachments != []:
+            print(message.attachments[0].url)
 
     for word in bad_words:
         if message.content.count(word) > 0:
