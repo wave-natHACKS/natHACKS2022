@@ -17,14 +17,15 @@ It also has an indefinite possibility and opportunities to grow and improve upon
 ### More detailed explanation of Data Preparation and Model Creation
 
 ## Data Preparation
-> 1. Choose the proper dataset (file). Especially try to take dataset collected from the nodes (interface) which were attached near the brain region which controls language. 
-> 2. Extract alpha, beta, gamma and theta waves and plot them as a normal plot
-> 3. Stack them into a single image (stack them like in RGB way). Please refer to data_prep.ipynb for details
+> 1. We Chose Zuco 2..0 dataset.
+> 2. Extracted alpha, beta, gamma and theta waves and plot them as a normal plot for each type of wave
+> 3. Stack each plot into a single image (stack them like in RGB channel). 
 > 4. Save stacked image in .npy format. This is to retain each channel’s information and preventing it to be converted into simple RGB image
-> 5. Store path to image, word and classification (happiness, sadness, etc) in single csv file
+> 5. use word2vec word embedder to help classify which the word. We used the cosine similarity algorithm of word2vec to greedily chose the most similar label for this word
+> 6. Store path to image, word and classification (happiness, sadness, etc) in single csv file
 
 ## Model Creation
-> 1. Prepare dataset (image and label pair). Normalize the image to prevent model paramters to become gigantic. If labels are not onehot encoded, do so (I can provide script for this). Make sure to check that your images are in the expected shape.
+> 1. Prepare dataset (image and label pair). Normalize the image to prevent model paramters to become gigantic.
 > 2. Create model. There are multiple ways to build models in tensorflow (and that’s why I am not a big fan of tensorflow), but we will stick to the method which uses Sequential class. Refer to tutorial for this.
 > 3. Compile model and fit. There are bunch of options to compile, like optimizer or loss. Nowadays people usually use Adam with a learning rate of 1e-4 ~ 1e-5 for optimizer since it is known to wrok well. For loss function, choose CrossEntropy or its variant. This is due to the format of data in multiclass supervised learning. 
 > 4. After the successful run, you might want to save it immediately. Some process takes 10 hours or beyond, so make sure to save. 
