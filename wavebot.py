@@ -93,7 +93,6 @@ async def on_message(message):
                 print("Saving .npy file succeeded")
 
                 file = np.load(filename)
-                print(file.shape)
 
                 embedded = discord.Embed(title="Saving .npy File", description=filename)
                 await message.channel.send(content=None,embed=embedded)
@@ -101,14 +100,14 @@ async def on_message(message):
                 time.sleep(0.5)
         
                 time.sleep(1)
-                embedded = discord.Embed(title="Status Update:", description=filename + "saved successfully.")
+                embedded = discord.Embed(title="Status Update:", description=filename + " saved successfully.")
                 await message.channel.send(content=None,embed=embedded)
                 
                 time.sleep(1.5)
                 embedded = discord.Embed(title="Beginning Data Pre-processing and Modelling", description= "")
                 await message.channel.send(content=None,embed=embedded)
 
-                model = load_model("C:\natHACKS2022\data.h5")
+                model = load_model("data.h5")
                 index = predict(file, model)
 
                 embedded = discord.Embed(title="Detecting Emotions...")
