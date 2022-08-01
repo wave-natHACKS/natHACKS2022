@@ -52,7 +52,7 @@ async def on_message(message):
             print(file.shape)
 
             time.sleep(0.5)
-            await message.channel.send("Saving File: " + filename)
+            await message.channel.send("Saving File: " + filename + "...")
             time.sleep(1)
             await message.channel.send("File has been successfully saved!")
             time.sleep(1.5)
