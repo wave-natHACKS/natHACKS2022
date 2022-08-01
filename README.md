@@ -29,3 +29,6 @@ It also has an indefinite possibility and opportunities to grow and improve upon
 > 3. Compile model and fit. There are bunch of options to compile, like optimizer or loss. Nowadays people usually use Adam with a learning rate of 1e-4 ~ 1e-5 for optimizer since it is known to wrok well. For loss function, choose CrossEntropy or its variant. This is due to the format of data in multiclass supervised learning. 
 > 4. After the successful run, you might want to save it immediately. Some process takes 10 hours or beyond, so make sure to save. 
 > 5. After saving the model, you can test your trained model on some test dataset and check the accuracy or other evaluation metrics to evaluate the performance.
+
+## github branches
+> in modules branch, there is code that did data processing and the training of model
