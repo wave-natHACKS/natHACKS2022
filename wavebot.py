@@ -95,7 +95,7 @@ async def on_message(message):
             print("Saving .npy file succeeded")
 
             file = np.load(filename)
-            print(file)
+            print(file.shape)
 
             """r = requests.get(url, stream=True)
             with open(filename, "wb") as out_file:
