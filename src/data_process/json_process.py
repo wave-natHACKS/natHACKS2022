@@ -41,11 +41,11 @@ def wave_to_img(
         ax.set_axis_off()
 
         # Save plot as np array
-        buffer = io.BytestIO()
+        buffer = io.BytesIO()
         fig.savefig(buffer, format="raw", dpi=dpi)
         buffer.seek(0)
         img_arr = np.frombuffer(buffer.getvalue(), dtype=np.uint8)
-        img_arr = np.reshape(img_arr, (int(fig.bbox.bounds[3], int(fig.bbox.bounds[2]), -1)))
+        img_arr = np.reshape(img_arr, (int(fig.bbox.bounds[3]), int(fig.bbox.bounds[2]), -1))
         buffer.close()
 
         # Convert buffer image into grayscale and save
@@ -79,10 +79,21 @@ def get_emotion(
     word2vec: Word2Vec
 ) -> str:
     """Relabel the word with similar emotion."""
-
-    apply_w2v = lambda cls: word2vec(word.lower(), cls)
-    similarities = apply_w2v(emotion_classes)
+    
+    apply_w2v = lambda cls: word2vec.wv.similarity(word.lower(), cls)
+    vec_apply = np.vectorize(apply_w2v)
+    similarities = vec_apply(emotion_classes)
     return emotion_classes[np.argmax(similarities)]
+
+
+def removeSymbol(word: str) -> str:
+    """Remove special symbols other than alphabets."""
+    special_charact = "!-$%&'()*+,./:;<=>?_[]^`{|}~@#"
+    noSymbolWord = ""
+    for w in word:
+        if w not in special_charact:
+            noSymbolWord += w
+    return noSymbolWord
 
 
 def make_df(
@@ -94,28 +105,34 @@ def make_df(
     """Make dataframe for single file."""
 
     # Initialize word2vec with given sentence
-    word2vec = Word2Vec([list(data.keys()) + emotion_classes.tolist()],
-                        mincount=1,
+    list_ = []  # no symbol
+    for word in data.keys():
+        word = removeSymbol(word.lower())
+        list_.append(word)
+
+    word2vec = Word2Vec([list_ + emotion_classes.tolist()],
+                        min_count=1,
                         size=32)
 
     words = []
     cols = []
     fnames = []
     emo = []
-    for word, word_dict in data.items():
+    for i, word_dict in enumerate(data.values()):
         # Skip words without brainwave data
         if list(word_dict.values())[0] == []:
             continue
-        
-        words.append(word)
+        noSymbolWord = list_[i]
+        words.append(noSymbolWord)
         
         # Convert numerical wave data into image
-        f_path = img_dir + f"{word}_{idx}.npy"
+        f_path = img_dir + f"{noSymbolWord}_{idx}.npy"
+        print(f_path)
         _ = wave_to_img(word_dict, save_path=f_path, dpi=75)
         fnames.append(f_path)
 
         # Get the emotion label
-        emotion = get_emotion(word, emotion_classes, word2vec)
+        emotion = get_emotion(noSymbolWord, emotion_classes, word2vec)
         emo.append(emotion)
     
     fnames = np.asarray(fnames)
