@@ -91,7 +91,6 @@ async def on_message(message):
         if message.content.count(word) > 0:
             await message.channel.send("A bad word was said.")
             
-            
     if message.content == "!help":
         embedded = discord.Embed(title="BOT Help", description="Helpful Commands...")
         embedded.add_field(name="!about", value="Description of me!")
