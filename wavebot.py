@@ -52,6 +52,7 @@ async def on_ready():
 #Restricted to the specific channel where only specific users can communicate with the bot
 @client.event
 async def on_message(message):
+    global scannedNpy, happy, sad, angry, disgust, fear, neutral
 
     id = client.get_guild(991909090517340170)
     channels = ["testing-bot"]
