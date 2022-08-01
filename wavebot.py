@@ -90,11 +90,12 @@ async def on_message(message):
         if filename.endswith(".npy"):
             await message.attachments[0].save(fp="NpyFiles/{}".format(filename))
 
+            testarray = np.load(filename + '.npy')
+            await message.channel.send(testarray)
 
     for word in bad_words:
         if message.content.count(word) > 0:
             await message.channel.send("A bad word was said.")
-            
             
             
     if message.content == "!help":
