@@ -1,5 +1,5 @@
 # this file was provided by zuco 2.0 studies
-# modified by Truong Pham
+# modified by to fix errors
 # 1. dataset.value() was depreciated so I had to change to new syntax
 # 2. chr(c)  -> chr(c[0])
 

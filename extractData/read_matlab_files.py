@@ -1,8 +1,10 @@
+# this reader was given by zuco 2.0 database, modified to extract data we need
 import os
 import numpy as np
 import h5py
 import data_loading_helpers as dh
 import json
+from pathlib import Path
 
 task = "NR"
 
@@ -33,7 +35,9 @@ for file in os.listdir(rootdir):
         subject = file_name.split("ts")[1].split("_")[0]
 
         # exclude YMH due to incomplete data because of dyslexia
-        if subject != 'YMH':
+        if subject != 'YAC':
+            
+            count = 1
 
             f = h5py.File(file_name)
             sentence_data = f['sentenceData']
@@ -47,7 +51,7 @@ for file in os.listdir(rootdir):
             # print(len(rawData))
             wordDICT = dict()  # stores "word": {alpha: [], beta: [], gamma:[]}
 
-            for idx in range(len(rawData) - len(rawData) + 1):
+            for idx in range(len(rawData)):
                 obj_reference_content = contentData[idx][0]
                 sent = dh.load_matlab_string(f[obj_reference_content])
 
@@ -61,7 +65,6 @@ for file in os.listdir(rootdir):
 
                 # number of tokens
                 # print(len(word_data))
-                count = 0
                 for widx in range(len(word_data)):
                 
                     # get first fixation duration (FFD)
@@ -89,6 +92,16 @@ for file in os.listdir(rootdir):
                     
                     
                 dumped = json.dumps(wordDICT, cls=NumpyEncoder)
-                with open ("onePhrase.json", "w") as outfile:
+                string_ = "./datasetYAG_NR/YAGNRphrase" + str(count) + ".json"
+
+                base = Path('datasetH')
+ 
+
+                with open (string_, "w") as outfile:
                     json.dump(dumped, outfile)
+
+                count += 1
+
+                # clear the dicitonary
+                wordDICT.clear()
                 #print(wordDICT)
