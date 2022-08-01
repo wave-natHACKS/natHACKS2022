@@ -1,13 +1,11 @@
 import discord
 import os
 import time
-import asyncio
 import requests
 import json
 import numpy as np
 
 client = discord.Client()
-
 
 #When the brain wave is categorized as sadness, it will display an encouraging message
 def emotion_sadness():
@@ -33,7 +31,7 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
-    id = client.get_guild(991909090517340170)
+    id = client.get_guild(991909090517340170) 
     channels = ["testing-bot"]
 
     # First checking if the user has sent a .npy file and save it, if yes.
@@ -63,6 +61,111 @@ async def on_message(message):
             time.sleep(1.5)
             embedded = discord.Embed(title="Beginning Data Pre-processing and Modelling", description= "")
             await message.channel.send(content=None,embed=embedded)
+
+            """
+            index = 0
+
+            embedded = discord.Embed(title="Detecting Emotions...")
+            await message.channel.send(content=None,embed=embedded)
+            time.sleep(2)
+
+            if index == 0:
+
+                embedded_anger = discord.Embed(title="Experiment Result")
+                embedded_anger.add_field(name="Emotion detected is:",value="ANGER")
+                await message.channel.send(content=None,embed=embedded_anger)
+
+                emoji_anger = '\U0001F621'
+                await message.add_reaction(emoji_anger)
+
+                await message.channel.send('Hey' + message.author.mention + '...')
+                time.sleep(0.5)
+                await message.channel.send('No one heals themselves')
+                time.sleep(1.5)
+                await message.channel.send('by wounding another.')
+
+            elif index == 1:
+
+                embedded_disgust = discord.Embed(title="Experiment Result")
+                embedded_disgust.add_field(name="Emotion detected is:",value="DISGUST")
+                await message.channel.send(content=None,embed=embedded_disgust)
+
+                emoji_disgust = '\U0001F922'
+                await message.add_reaction(emoji_disgust)
+
+                await message.channel.send("What are you disgusted about?" + message.author.mention)
+                time.sleep(1)
+                quick_message = await message.channel.send("Did you look at yourself in the mirror again?")
+                time.sleep(1.75)
+                await quick_message.delete()  
+
+            elif index == 2:
+
+                embedded_fear = discord.Embed(title="Experiment Result")
+                embedded_fear.add_field(name="Emotion detected is:",value="FEAR")
+                await message.channel.send(content=None,embed=embedded_fear)
+
+
+                emoji_fear = '\U0001F628'
+                await message.add_reaction(emoji_fear) 
+
+                #Send the messages with fear
+                await message.channel.send("You...")
+                time.sleep(1)
+                await message.channel.send("are")
+                time.sleep(0.2)
+                await message.channel.send(".")
+                time.sleep(0.2)
+                await message.channel.send(".")
+                time.sleep(0.2)
+                await message.channel.send(".\n")
+                time.sleep(0.3)
+                await message.channel.send("scared.....")
+                time.sleep(3)
+                await message.channel.send("BOO!")
+
+            elif index == 3:
+
+                embedded_happy = discord.Embed(title="Experiment Result")
+                embedded_happy.add_field(name="Emotion detected is:",value="HAPPINESS")
+                await message.channel.send(content=None,embed=embedded_happy)
+
+                emoji_happy = '\U0001F604'	
+                await message.add_reaction(emoji_happy)
+
+                link = emotion_happiness()
+                await message.channel.send(link)
+
+            elif index == 4:
+
+                embedded_neutral = discord.Embed(title="Experiment Result")
+                embedded_neutral.add_field(name="Emotion detected is:",value="NEUTRAL")
+                await message.channel.send(content=None,embed=embedded_neutral)
+
+                emoji_neutral = '\U0001F610'
+                await message.add_reaction(emoji_neutral)
+
+                await message.channel.send("You could use a smile I bet.")
+                time.sleep(2) 
+                await message.channel.send("The opposite of artificial intelligence is..")
+                time.sleep(1)
+                await message.channel.send("Real Stupid.")
+                time.sleep(1)
+                await message.channel.send("Hahaha!!! ")
+
+            elif index == 5:
+                
+                embedded_sad = discord.Embed(title="Experiment Result")
+                embedded_sad.add_field(name="Emotion detected is:",value="SADNESS")
+                await message.channel.send(content=None,embed=embedded_sad)
+
+                emoji_sad = '\U0001F614'	
+                await message.add_reaction(emoji_sad)
+
+                quote = emotion_sadness()
+                await message.channel.send(quote + "\n")   
+
+            """
 
     """
     Data pre-processing and modelling
