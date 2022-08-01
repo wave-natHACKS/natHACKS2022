@@ -7,7 +7,13 @@ import json
 import numpy as np
 
 # Keep track of total .npy files scanned and cumulative number of emotions (these are global variables)
-scannedNpy, happy, sad, angry, disgust, fear, neutral = 0
+scannedNpy = 0
+happy = 0 
+sad = 0 
+angry = 0 
+disgust = 0 
+fear = 0 
+neutral = 0
 
 client = discord.Client()
 
@@ -66,7 +72,7 @@ async def on_message(message):
     else:
         print(message.attachments)
         if message.attachments != []:
-            url = message.attachments[0].url
+            """url = message.attachments[0].url"""
             filename = message.attachments[0].filename
 
             await message.attachments[0].save(filename)
