@@ -114,7 +114,7 @@ def make_df(
                         min_count=1,
                         size=32)
 
-    words = []
+    # words = []
     cols = []
     fnames = []
     emo = []
@@ -123,7 +123,7 @@ def make_df(
         if list(word_dict.values())[0] == []:
             continue
         noSymbolWord = list_[i]
-        words.append(noSymbolWord)
+        # words.append(noSymbolWord)
         
         # Convert numerical wave data into image
         f_path = img_dir + f"{noSymbolWord}_{idx}.npy"

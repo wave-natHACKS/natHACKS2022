@@ -12,8 +12,9 @@ def get_cnn_classifier(
     """Construct a simple CNN model for the project.
     Reference: https://www.tensorflow.org/tutorials/images/classification
     """
+
     model = Sequential([
-        layers.InputLayer(input_shape=(in_height, in_width, in_channels)),
+        layers.Rescaling(1./255, input_shape=(in_height, in_width, in_channels)),
         layers.Conv2D(16, 3, padding="same", activation="relu"),
         layers.MaxPooling2D(),
         layers.Conv2D(32, 3, padding="same", activation="relu"),
